@@ -1,0 +1,3 @@
+#!/usr/bin/execlineb -P
+s6-setuidgid nginx
+/usr/bin/php8 /var/www/pterodactyl/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3
