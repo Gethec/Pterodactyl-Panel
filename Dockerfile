@@ -95,4 +95,3 @@ VOLUME [ "/config" ]
 
 # Set entrypoint to S6-Overlay
 ENTRYPOINT [ "/init" ]
-CMD ["php8 /var/www/pterodactyl/artisan queue:work","--queue=high,standard,low","--sleep=3","--tries=3"]
