@@ -63,9 +63,9 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2"
 COPY --from=build --chown=nginx:nginx /var/www /var/www
 COPY root/ /
 
-# Download latest S6-Overlay build from project repository: https://github.com/just-containers/s6-overlay
-#ADD https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-amd64-installer /tmp/s6-overlay
-ADD https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-amd64-installer /tmp/s6-overlay
+# Download latest S6-Overlay components from project repository: https://github.com/just-containers/s6-overlay
+ADD https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-noarch.tar.xz /tmp
+ADD https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-x86_64.tar.xz /tmp
 
 # Download latest Wait-For-It script from project repository: https://github.com/vishnubob/wait-for-it
 ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /usr/local/bin/wait-for-it
@@ -74,8 +74,9 @@ ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.s
 ADD https://bitbucket.org/Gethec/projecttools/raw/master/DockerUtilities/ContainerTools /usr/bin/ContainerTools
 
 # Install S6-Overlay and Wait-For-It
-RUN chmod u+x /tmp/s6-overlay /usr/local/bin/wait-for-it && \
-    /tmp/s6-overlay / && \
+RUN chmod u+x /usr/local/bin/wait-for-it && \
+    tar -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz && \
+    tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && \
     # Remove preinstalled conf files
     rm -rf \
         /tmp/* \

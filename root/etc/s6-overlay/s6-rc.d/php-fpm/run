@@ -1,0 +1,2 @@
+#!/command/execlineb -P
+php-fpm8 -Fc /etc/php8
