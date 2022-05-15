@@ -57,7 +57,8 @@ RUN apk add yarn && \
 
 FROM base AS release
 WORKDIR /var/www/pterodactyl
-ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2"
+ENV S6_BEHAVIOUR_IF_STAGE2_FAILS="2" \
+    S6_CMD_WAIT_FOR_SERVICES_MAXTIME="0"
 
 # Copy built Panel from Build stage
 COPY --from=build --chown=nginx:nginx /var/www /var/www
