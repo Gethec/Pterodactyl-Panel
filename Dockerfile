@@ -71,7 +71,7 @@ ADD https://github.com/just-containers/s6-overlay/releases/latest/download/s6-ov
 ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /usr/local/bin/wait-for-it
 
 # Download common tools
-ADD https://bitbucket.org/Gethec/projecttools/raw/master/DockerUtilities/ContainerTools /usr/bin/ContainerTools
+ADD https://raw.githubusercontent.com/Gethec/ProjectTools/main/DockerUtilities/ContainerTools /usr/bin/ContainerTools
 
 # Install S6-Overlay and Wait-For-It
 RUN chmod u+x /usr/local/bin/wait-for-it && \
