@@ -1,10 +1,11 @@
-version: "3.9"
 services:
-  mariadb:
+  db:
     image: lscr.io/linuxserver/mariadb
     restart: always
+    env_file:
+      - db.env
     volumes:
-      - "C:\\Docker\\MariaDB:/config"
+      - "/config/MariaDB:/config"
 
   adminer:
     image: adminer:latest
@@ -21,12 +22,12 @@ services:
     ports:
       - 81:80
     environment:
-      DBHOST: "mariadb"
+      DBHOST: "db"
       REDISHOST: "redis"
     volumes:
-      - "C:\\Docker\\Panel:/config"
+      - "/config/Panel:/config"
     depends_on:
-      - mariadb
+      - db
       - adminer
       - redis
     #command: "php8 /var/www/pterodactyl/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3"
