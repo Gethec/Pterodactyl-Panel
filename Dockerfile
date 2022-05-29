@@ -31,8 +31,7 @@ RUN apk --no-cache --update upgrade && \
     mkdir -p \
         /var/www/pterodactyl \
         /run/nginx \
-        /run/php-fpm && \
-    ln -s /usr/bin/php8 /usr/bin/php
+        /run/php-fpm
 
 FROM base AS build
 WORKDIR /var/www/pterodactyl
