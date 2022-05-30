@@ -28,4 +28,4 @@ services:
       - db
       - adminer
       - redis
-    command: "php8 /var/www/pterodactyl/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3"
+    command: "php /var/www/pterodactyl/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3"
