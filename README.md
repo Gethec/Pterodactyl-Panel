@@ -2,7 +2,7 @@
 
 ## **NOTICE:**
 
-S6-Overlay released V3 at the start of the year, and with it came fundamental changes to how containers are built and services are handled.  I will, in the near future, be moving this container to the new system, which will require some changes to how the container is configured and run.  To allow users who do not wish to make these changes to continue to use the container, I have created the `s6-v2` branch and tag that will continue to be built with the final release of S6 before the version jump.  For those who want to jump straight into the new, untested, but probably working S6 V3 version, check out the `dev` tag.  If you run into any questions or problems, please open an issue!
+S6-Overlay released V3 at the start of the year, and with it came fundamental changes to how containers are built and services are handled.  I will, in the near future, be moving this container to the new system, which will require some changes to how the container is configured and run.  To allow users who do not wish to make these changes to continue to use the container, I have created the `s6-v2` branch and tag that will continue to be built with the final release of S6 before the version jump.  For those who want to jump straight into the new, untested, but probably working S6 V3 version, check out the `s6-v3` tag.  If you run into any questions or problems, please open an issue!
 
 ## Disclaimer ##
 As with anything else, exposing your system to the Internet incurs risks!  This container does its best to be as secure as possible, but makes no guarantees to being completely impenetrable.  Use at your own risk, and feel free to suggest changes that can further increase security.
