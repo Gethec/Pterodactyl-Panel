@@ -1,5 +1,4 @@
 FROM alpine AS base
-# FROM alpine
 
 # Update and prepare base image
 RUN apk --no-cache --update upgrade && \
@@ -7,33 +6,32 @@ RUN apk --no-cache --update upgrade && \
         bash \
         curl \
         nginx \
-        php81 \
-        php81-bcmath \
-        php81-common \
-        php81-ctype \
-        php81-dom \
-        php81-fileinfo \
-        php81-fpm \
-        php81-gd \
-        php81-mbstring \
-        php81-pecl-memcached \
-        php81-openssl \
-        php81-pdo \
-        php81-pdo_mysql \
-        php81-phar \
-        php81-json \
-        php81-session \
-        php81-simplexml \
-        php81-sodium \
-        php81-tokenizer \
-        php81-xmlwriter \
-        php81-zip \
-        php81-zlib && \
+        php8 \
+        php8-bcmath \
+        php8-common \
+        php8-ctype \
+        php8-dom \
+        php8-fileinfo \
+        php8-fpm \
+        php8-gd \
+        php8-mbstring \
+        php8-pecl-memcached \
+        php8-openssl \
+        php8-pdo \
+        php8-pdo_mysql \
+        php8-phar \
+        php8-json \
+        php8-session \
+        php8-simplexml \
+        php8-sodium \
+        php8-tokenizer \
+        php8-xmlwriter \
+        php8-zip \
+        php8-zlib && \
     mkdir -p \
         /var/www/pterodactyl \
         /run/nginx \
-        /run/php-fpm && \
-        ln -s /usr/bin/php81 /usr/bin/php
+        /run/php-fpm
 
 FROM base AS build
 WORKDIR /var/www/pterodactyl
@@ -47,7 +45,7 @@ RUN apk add yarn && \
     rm panel.tar.gz && \
     chmod -R 755 storage/* bootstrap/cache && \
     find storage -type d > .storage.tmpl && \
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    curl -sS https://getcomposer.org/installer | php8 -- --install-dir=/usr/local/bin --filename=composer && \
     cp .env.example .env && \
     composer install --ansi --no-dev --optimize-autoloader && \
     chown -R nginx:nginx * && \
@@ -80,10 +78,10 @@ RUN chmod u+x /tmp/s6-overlay /usr/local/bin/wait-for-it && \
     rm -rf \
         /tmp/* \
         /etc/nginx/http.d/default.conf \
-        /etc/php81/php-fpm.d/www.conf && \
+        /etc/php8/php-fpm.d/www.conf && \
     # Symlink storage and conf file
-    ln -s /config/storage /var/www/pterodactyl/storage && \
-    ln -s /config/pterodactyl.conf /var/www/pterodactyl/.env
+    ln -s /config/storage storage && \
+    ln -s /config/pterodactyl.conf .env
 
 # Expose HTTP port
 EXPOSE 80
