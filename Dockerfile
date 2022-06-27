@@ -1,11 +1,11 @@
 FROM alpine AS base
 
+# Set PHP and PHP-FPM versions
 ENV PHP_VER="php81" \
     PHPFPM_VER="php-fpm81"
 
 # Update and prepare base image
-RUN apk --no-cache --update upgrade && \
-    apk add \
+RUN apk --no-cache add \
         bash \
         curl \
         nginx \
@@ -35,28 +35,24 @@ RUN apk --no-cache --update upgrade && \
         /var/www/pterodactyl \
         /run/nginx \
         /run/php-fpm && \
-        ln -s /usr/bin/${PHP_VER} /usr/bin/php && \
-        ln -s /usr/sbin/${PHPFPM_VER} /usr/sbin/php-fpm && \
-        ln -s /var/log/${PHP_VER} /var/log/php && \
-        ln -s /etc/${PHP_VER} /etc/php
-
-# FROM base AS test
-
-# CMD /bin/bash
+    ln -s /etc/${PHP_VER} /etc/php && \
+    ln -s /usr/bin/${PHP_VER} /usr/bin/php && \
+    ln -s /usr/sbin/${PHPFPM_VER} /usr/sbin/php-fpm && \
+    ln -s /var/log/${PHP_VER} /var/log/php
 
 FROM base AS build
 WORKDIR /var/www/pterodactyl
 
 # Download latest Panel build from project repository: https://github.com/pterodactyl/panel
-ADD https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz ./panel.tar.gz
+ADD https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz panel.tar.gz
 
 # Install dependencies, perform Panel installation process
-RUN apk add yarn && \
+RUN apk --no-cache add yarn && \
     tar -xf panel.tar.gz && \
     rm panel.tar.gz && \
     chmod -R 755 storage/* bootstrap/cache && \
     find storage -type d > .storage.tmpl && \
-    curl -sS https://getcomposer.org/installer | ${PHP_VER} -- --install-dir=/usr/local/bin --filename=composer && \
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     cp .env.example .env && \
     composer install --ansi --no-dev --optimize-autoloader && \
     chown -R nginx:nginx * && \
