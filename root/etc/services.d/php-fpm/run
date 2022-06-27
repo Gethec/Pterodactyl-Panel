@@ -1,2 +1,2 @@
 #!/usr/bin/execlineb -P
-/usr/sbin/php-fpm8 -Fc /etc/php8
+/usr/sbin/php-fpm -Fc /etc/php
