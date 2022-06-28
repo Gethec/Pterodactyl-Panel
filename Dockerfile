@@ -1,37 +1,44 @@
 FROM alpine AS base
 
+# Set PHP and PHP-FPM versions
+ENV PHP_VER="php81" \
+    PHPFPM_VER="php-fpm81"
+
 # Update and prepare base image
-RUN apk --no-cache --update upgrade && \
-    apk add \
+RUN apk --no-cache add \
         bash \
         curl \
         nginx \
-        php8 \
-        php8-bcmath \
-        php8-common \
-        php8-ctype \
-        php8-dom \
-        php8-fileinfo \
-        php8-fpm \
-        php8-gd \
-        php8-mbstring \
-        php8-pecl-memcached \
-        php8-openssl \
-        php8-pdo \
-        php8-pdo_mysql \
-        php8-phar \
-        php8-json \
-        php8-session \
-        php8-simplexml \
-        php8-sodium \
-        php8-tokenizer \
-        php8-xmlwriter \
-        php8-zip \
-        php8-zlib && \
+        ${PHP_VER} \
+        ${PHP_VER}-bcmath \
+        ${PHP_VER}-common \
+        ${PHP_VER}-ctype \
+        ${PHP_VER}-dom \
+        ${PHP_VER}-fileinfo \
+        ${PHP_VER}-fpm \
+        ${PHP_VER}-gd \
+        ${PHP_VER}-mbstring \
+        ${PHP_VER}-pecl-memcached \
+        ${PHP_VER}-openssl \
+        ${PHP_VER}-pdo \
+        ${PHP_VER}-pdo_mysql \
+        ${PHP_VER}-phar \
+        ${PHP_VER}-json \
+        ${PHP_VER}-session \
+        ${PHP_VER}-simplexml \
+        ${PHP_VER}-sodium \
+        ${PHP_VER}-tokenizer \
+        ${PHP_VER}-xmlwriter \
+        ${PHP_VER}-zip \
+        ${PHP_VER}-zlib && \
     mkdir -p \
         /var/www/pterodactyl \
         /run/nginx \
-        /run/php-fpm
+        /run/php-fpm && \
+    ln -s /etc/${PHP_VER} /etc/php && \
+    ln -s /usr/bin/${PHP_VER} /usr/bin/php && \
+    ln -s /usr/sbin/${PHPFPM_VER} /usr/sbin/php-fpm && \
+    ln -s /var/log/${PHP_VER} /var/log/php
 
 FROM base AS build
 WORKDIR /var/www/pterodactyl
@@ -45,10 +52,10 @@ RUN apk add yarn && \
     rm panel.tar.gz && \
     chmod -R 755 storage/* bootstrap/cache && \
     find storage -type d > .storage.tmpl && \
-    curl -sS https://getcomposer.org/installer | php8 -- --install-dir=/usr/local/bin --filename=composer && \
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     cp .env.example .env && \
     composer install --ansi --no-dev --optimize-autoloader && \
-    chown -R nginx:nginx * && \
+#    chown -R nginx:nginx * && \
     yarn install --production && \
     yarn add cross-env && \
     yarn run build:production && \
@@ -68,20 +75,20 @@ ADD https://github.com/just-containers/s6-overlay/releases/latest/download/s6-ov
 ADD https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-x86_64.tar.xz /tmp
 
 # Download latest Wait-For-It script from project repository: https://github.com/vishnubob/wait-for-it
-ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /usr/local/bin/wait-for-it
+ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /usr/local/sbin/wait-for-it
 
 # Download common tools
-ADD https://raw.githubusercontent.com/Gethec/ProjectTools/main/DockerUtilities/ContainerTools /usr/bin/ContainerTools
+ADD https://raw.githubusercontent.com/Gethec/ProjectTools/main/DockerUtilities/ContainerTools /usr/local/sbin/ContainerTools
 
 # Install S6-Overlay and Wait-For-It
-RUN chmod u+x /usr/local/bin/wait-for-it && \
+RUN chmod u+x /usr/local/sbin/wait-for-it && \
     tar -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz && \
     tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && \
     # Remove preinstalled conf files
     rm -rf \
         /tmp/* \
         /etc/nginx/http.d/default.conf \
-        /etc/php8/php-fpm.d/www.conf && \
+        /etc/${PHP_VER}/php-fpm.d/www.conf && \
     # Symlink storage and conf file
     ln -s /config/storage storage && \
     ln -s /config/pterodactyl.conf .env

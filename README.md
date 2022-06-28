@@ -12,7 +12,7 @@ The configuration of the Panel container is much less complicated than the Wings
 ### Variables ###
 This container uses [vishnubob's wait-for-it](https://github.com/vishnubob/wait-for-it) script to allow you to have startup wait for the SQL and Redis servers to become available before continuing.  Simply set the HOST values to the correct hostname or IP address, and specific a port number, if you are not using the services' default option.  You can also set `TESTTIME` to change the wait period from the default 30 seconds to whatever you desire.
 
-It's also worth noting that, since this container is developed for use in Unraid, which has several excelent reverse proxy options, not much attention has been given to making the HTTPS option work.  It should work in theory, but please submit a bug report if you encounter any issues.  To enable, set `HTTPS` to "true", then map the location of your `fullchain.pem` and `privkey.pem` files to `/le-ssl`.
+It's also worth noting that, since this container is developed for use in Unraid, which has several excellent reverse proxy options, not much attention has been given to making the HTTPS option work.  It should work in theory, but please submit a bug report if you encounter any issues.  To enable, set `HTTPS` to "true", then map the location of your `fullchain.pem` and `privkey.pem` files to `/le-ssl`.
 
 | Variable | Default | Example |
 |----------|---------|---------|
