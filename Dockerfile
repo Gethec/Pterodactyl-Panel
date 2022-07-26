@@ -55,7 +55,6 @@ RUN apk add yarn && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     cp .env.example .env && \
     composer install --ansi --no-dev --optimize-autoloader && \
-#    chown -R nginx:nginx * && \
     yarn install --production && \
     yarn add cross-env && \
     yarn run build:production && \
