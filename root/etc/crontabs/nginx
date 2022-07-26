@@ -1,1 +1,1 @@
-* * * * * php8 /var/www/pterodactyl/artisan schedule:run >> /dev/null 2>&1
+* * * * * php /var/www/pterodactyl/artisan schedule:run >> /dev/null 2>&1
