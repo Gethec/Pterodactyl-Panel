@@ -2,7 +2,8 @@ FROM alpine AS base
 
 # Set PHP and PHP-FPM versions
 ENV PHP_VER="php81" \
-    PHPFPM_VER="php-fpm81"
+    PHPFPM_VER="php-fpm81" \
+    NODE_OPTIONS=--openssl-legacy-provider
 
 # Update and prepare base image
 RUN apk --no-cache add \
@@ -23,6 +24,7 @@ RUN apk --no-cache add \
         ${PHP_VER}-pdo \
         ${PHP_VER}-pdo_mysql \
         ${PHP_VER}-phar \
+        ${PHP_VER}-posix \
         ${PHP_VER}-json \
         ${PHP_VER}-session \
         ${PHP_VER}-simplexml \
@@ -36,7 +38,7 @@ RUN apk --no-cache add \
         /run/nginx \
         /run/php-fpm && \
     ln -s /etc/${PHP_VER} /etc/php && \
-    ln -s /usr/bin/${PHP_VER} /usr/bin/php && \
+    #ln -s /usr/bin/${PHP_VER} /usr/bin/php && \
     ln -s /usr/sbin/${PHPFPM_VER} /usr/sbin/php-fpm && \
     ln -s /var/log/${PHP_VER} /var/log/php
 
